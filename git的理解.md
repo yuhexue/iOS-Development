@@ -144,9 +144,5 @@ rebase:
 
 
 
-#### Plus:
 
-解决冲突：冲突对比工具beyond compare
-
-xcode工具
 
