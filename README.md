@@ -82,7 +82,9 @@ viewModel会引用自己的view所需要的model（数据交互）
 
 ## 工具使用篇：
 
-### Xcode使用:
+### Xcode:
+
+#### 快捷键：
 
 command + N 新建文件 
 command + delete 删除一行 
@@ -107,37 +109,23 @@ command+shift+control+a查看代码作者
 
 查找可以command + shift + o，或者某个文件内control+F，或者工程左栏的🔍。替换可以在🔍栏里面把find改为replace，然后筛选时可以选择contains或match。
 
-### 断点调试和编译：
-
 #### 调试工具LLDB：LLVM Debugger
 
-除了打log。LLDB是一个有着REPL特性和C++、Python插件的开源调试器。LLDB常用的指令:
+LLDB是Xcode集成的调试器。常用指令:
+**help**列出所有的命令列表
+**print\po命令**打印，p输出的是基本类型，po输出的是Objective-C对象，调试器会输出这个object的description信息。
+**expression命令**(expr)简写是e，可用expression来声明新的变量，也可以改变已有变量的值。这个指令可以动态的执行表达式，同时打印出结果。常用来动态修改变量的值。
+**call命令**除了动态修改变量的值，xcode还支持动态调用函数，可以在不增加代码，不重新编译的情况下动态调用一个方法。
 
-help列出所有的命令列表
+```objective-c
+call [tipView removeFromSuperview]
+```
 
-**print\po命令**命令会打印对象的值，p输出的是基本类型，po输出的是Objective-C对象，调试器会输出这个object的description信息。
+**image**用于寻址
+**breakpoint list**可以查看所有断点，简写 br li
+**bt命令**打印当前栈帧信息
 
-**expression命令**
-
-expression的简写是e。可以用expression来声明新的变量，也可以改变已有变量的值。通知此指令改变变量的值，我们可以动态的改变程序运行的分支顺序。
-
-**image命令**
-
-image命令可用于寻址，
-
-**breakpoint list命令**
-
-breakpoint list ： 可以查看所有断点， 简写 br li
-
-**bt命令**
-
-打印当前栈帧信息
-
-#### 
-
-## 调试UI时，LLDB能做的事：
-
-当程序在某个断点停下来以后，由于有上下文关系，我们很容易的能改掉任意的某个对象的属性值，函数指向等等。但是在调试UI的时候，有的时候我们想改掉某个View的某个属性，该属性是动态变化的，也就是说我们不能通过在view初始化的时候设置断点的方式来改掉这个属性，因为该属性会在后面的某个阶段被覆盖重写。去定位覆盖重写发生在哪里往往是耗时耗力的。此时我们怎么改掉这个view的属性呢？
+##### 用LLDB调试UI：
 
 Xcode提供的3D view hierarchy debugger支持我们看到现在屏幕效果是怎样的，也支持我们打印出某个view的内存地址。有了内存地址，LLDB就能做一切的事情了，因为LLDB能够根据内存地址知道现在在这个地址下存储的数据类型。比如:
 
@@ -146,9 +134,7 @@ Xcode提供的3D view hierarchy debugger支持我们看到现在屏幕效果是�
 <UIImageView: 0x7fea5c455ba0; frame = (0 0; 414 65); opaque = NO; autoresize = RM+BM; userInteractionEnabled = NO; layer = <CALayer: 0x600003819b80>>
 ```
 
-可以看到在这个内存地址下，存着一个UIImageView类型的数据
-
-我们可以直接拿这个内存地址当做这个对象来操作，例如：
+这个内存地址下，存着一个UIImageView类型的数据，我们可以拿这个内存地址当做这个对象来操作，例如：
 
 ```
 (lldb) po [0x7fea5c455ba0 image]
@@ -172,42 +158,35 @@ Xcode提供的3D view hierarchy debugger支持我们看到现在屏幕效果是�
 (lldb) 
 ```
 
-#### 断点：
+#### 断点调试：
 
 ![](/Users/max/GithubRepositories/iOS-Develpoment/img/xcode/1569502370_22_w3716_h1978.png)
 
 接下来介绍几个断点具体的使用场景：
-
 **条件断点：**
-
 1.选中断点右键Edit BreakPoint
-
 2.点击Add Action，选中Debugger Command
-
-\3. 输入需要执行的LLDB命令
-
-\4. 勾选 Automatically continue after evaluating actions，勾选后，程序执行完相应的LLDB命令后，会继续运行程序。
+3.输入需要执行的LLDB命令
+4.勾选 Automatically continue after evaluating actions，勾选后，程序执行完相应的LLDB命令后，会继续运行程序。
 
 <img src="/Users/max/GithubRepositories/iOS-Develpoment/img/xcode/截屏2020-08-15 下午5.04.01.png" style="zoom:50%;" />
 
 条件：在Conditon处填BOOL语句。
 断点忽略：对前几次调用不敢兴趣
-
+action：类型很多，有调试命令、apple script、shell script等。
 **异常断点**
-
 当创建异常断点后，会显示一个名为`All Exceptions`的断点，这一般称为全局断点。当程序抛出异常时会触发异常断点，并且大部分常见错误会被断点定位到对应的代码行，很方便调试。
 
 <img src="/Users/max/GithubRepositories/iOS-Develpoment/img/xcode/1569550135_37_w1586_h480.png" style="zoom:33%;" />
 
 **符号断点**
-
 符号断点（Symbolic Breakpoint）是全局断点，可以针对某一个方法（函数）设置断点。开发者可以很方便地创建一个符号断点，如下图：
 
 <img src="/Users/max/GithubRepositories/iOS-Develpoment/img/xcode/1569550640_52_w918_h344.png" style="zoom:50%;" />
 
 **Watch断点**
-
-watch断点就是当某个变量发生改变的时候触发的断点。在Xcode的watch窗口-> 右键需要watch的变量 -> watch “XXX”
+当变量发生改变的时候触发。在Xcode的watch窗口-> 右键需要watch的变量 -> watch “XXX”。
+watch断点对于要跟踪某个变量或者某个状态的变化是非常有用的，可以方便的跟踪哪些地方改变了变量的值。
 
 <img src="/Users/max/GithubRepositories/iOS-Develpoment/img/xcode/1569550995_13_w1860_h682.png" style="zoom:33%;" />
 
@@ -217,23 +196,25 @@ UI调试可以使用Xcode自带的调试工具，如图。
 
 ![](/Users/max/GithubRepositories/iOS-Develpoment/img/xcode/1569576462_77_w1528_h166.png)
 
-这里介绍一款更高效的UI调试工具：Lookin
-
-下载地址：[可点此下载。](https://lookin.work/get/) Lookin软件安装完毕后，我们需要把Lookin的iOS Framework嵌入到我们的iOS项目中。使用CocoaPods方式嵌入较为简单。
-
-### 使用CocoaPods设置
-
-1. 在Podfile 中添加以下内容：
+这里介绍一款更高效的UI调试工具：Lookin[点此下载](https://lookin.work/get/) 
+Lookin软件安装完毕后，我们需要把Lookin的iOS Framework嵌入到我们的iOS项目中。使用CocoaPods方式嵌入较为简单，步骤如下：
+1，在Podfile 中添加以下内容：
 
 ```
 pod 'LookinServer', :configurations => ['Debug']
 ```
 
- 这里指定了只有在 Debug 模式下才能使用 Lookin。
+这里指定了只有在 Debug 模式下才能使用 Lookin。
+2，运行 pod install 或 pod update LookinServer。
 
- \2. 运行 pod install 或 pod update LookinServer。
+#### Plus:
 
-待完善。
+查看控件信息可以使用p和po命令，也可以使用expr命令修改控件属性，如内容、大小等，这样可以不重启程序就能看到界面变化。
+注：有一个叫injectionPlugin的xcode插件，它能够在改变代码后不重启APP即可让改变生效。
+
+
+
+
 
 ### flutter：
 
@@ -253,7 +234,7 @@ VSCode使用：
 
 #### 小程序：
 
-
+http://km.oa.com/articles/show/431102?kmref=search&from_page=1&no=5
 
 
 
