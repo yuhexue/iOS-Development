@@ -13,14 +13,3 @@ flutter安装教程，参照官网：https://flutter.dev/docs/get-started/instal
 VSCode安装完成后，需要安装Flutter插件，和Dart插件. 在扩展窗口里，搜索**Flutter**，和**Dart**，点击“Install”即可，非常方便。 
 
 ##### VSCode使用：
-
-
-
-
-
-
-
-#### 小程序：
-
-http://km.oa.com/articles/show/431102?kmref=search&from_page=1&no=5
-
