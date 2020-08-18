@@ -29,6 +29,24 @@ command+shift+control+a查看代码作者
 
 全量编译是对整个工程文件编译，增量编译是对修改过的代码进行编译。xcode工程的第一次编译是全量编译，之后是增量编译。之后也可以了解使用一些插件来提升编译速度。
 
+###### 打日志
+
+可以使用 LogModuleDefine.h 定义的便捷宏定义来打日志，无需 import 这个头文件。Log_Error(module, format, ...) 
+Log_Debug(module, format, ...) 
+Log_Info(module, format, ...) 
+Log_Warn(module, format, ...) 
+Log_Verbose(module, format, ...)
+Log_Fatal(module, format, ...) 
+
+###### 捞日志
+
+捞日志地址：http://www.raft.run/page/LogReportManager.html
+
+使用方法
+APPID qinglian
+路径 默认为空
+UID 就是我们账户系统的 uid
+
 #### 调试工具LLDB：LLVM Debugger
 
 LLDB是Xcode集成的调试器。常用指令:
@@ -145,7 +163,7 @@ pod 'LookinServer', :configurations => ['Debug']
 
 
 
-###### 附录：LLDB常用指令🌰
+###### 附录1：LLDB常用指令🌰
 
 待完善
 

@@ -1,7 +1,3 @@
-# iOS-Development
-
-
-
 ### Typora in Mac使用技巧：(可在Typora菜单栏查看)
 
 #### 主题更换：
@@ -70,13 +66,6 @@
 - 先接口，再实现。先逻辑，再UI。
 
 
-
-
-#### MVVM/MVC：
-
-model一般是数据定义（包括后台的裸数据）
-
-viewModel会引用自己的view所需要的model（数据交互）
 
 
 
